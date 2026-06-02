@@ -1,0 +1,6 @@
+id,transaction_id,amount,customer_id,merchant,transaction_date,category,location,fraud_risk_score,risk_category,processed_at
+1,TX001,200.75,CUST100,Walmart,2024-04-12T00:00:00,Electronics,Los Angeles,0.1,low,2026-01-14T15:48:55.705013
+2,TX002,1168.17,CUST101,Subway,2024-12-19T00:00:00,Fuel,Online,0.8,high,2026-01-14T15:48:55.705024
+3,TX003,1813.51,CUST102,Subway,2024-08-08T00:00:00,Fuel,Houston,0.8,high,2026-01-14T15:48:55.705026
+4,TX004,1371.43,CUST103,Walmart,2024-04-18T00:00:00,Subscription,New York,0.8,high,2026-01-14T15:48:55.705028
+5,TX005,573.87,CUST104,Whole Foods,2024-06-15T00:00:00,Food,Houston,0.5,medium,2026-01-14T15:48:55.705030

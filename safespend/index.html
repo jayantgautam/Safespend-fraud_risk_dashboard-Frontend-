@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fraud Risk Dashboard</title>
+    <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <img src="assets/icons/shield.png" class="icon-img big" alt="SafeSpend">
+                <span>SafeSpend</span>
+            </div>
+            <div class="nav-links">
+                <a href="#dashboard" class="nav-link active">Dashboard</a>
+                <a href="#transactions" class="nav-link">Transactions</a>
+                <a href="#upload" class="nav-link">Upload</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>Fraud Risk Dashboard</h1>
+            <p>Monitor and analyze transaction fraud risks in real-time</p>
+        </header>
+
+        <!-- Summary Cards -->
+        <div class="summary-cards" id="dashboard">
+            <div class="card">
+                <div class="card-icon total">
+                    <img src="assets/icons/transactions.png" class="icon-img big" alt="Total Transactions">
+                </div>
+                <div class="card-content">
+                    <h3 id="total-transactions">0</h3>
+                    <p>Total Transactions</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-icon high-risk">
+                    <img src="assets/icons/high.png" class="icon-img big" alt="High Risk Icon">
+                </div>
+                <div class="card-content">
+                    <h3 id="high-risk-count">0</h3>
+                    <p>High Risk</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-icon medium-risk">
+                    <img src="assets/icons/medium.png" class="icon-img big" alt="Medium Risk Icon">
+                </div>
+                <div class="card-content">
+                    <h3 id="medium-risk-count">0</h3>
+                    <p>Medium Risk</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-icon low-risk">
+                    <img src="assets/icons/low.png" class="icon-img big" alt="Low Risk Icon">
+                </div>
+                <div class="card-content">
+                    <h3 id="low-risk-count">0</h3>
+                    <p>Low Risk</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="charts-section">
+            <div class="chart-container">
+                <div class="chart-card">
+                    <h3>Risk Distribution</h3>
+                    <canvas id="riskChart"></canvas>
+                </div>
+            </div>
+            <div class="chart-container">
+                <div class="chart-card">
+                    <h3>Amount by Category</h3>
+                    <canvas id="categoryChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Upload Section -->
+        <section class="upload-section" id="upload">
+            <div class="upload-card">
+                <h2><img src="assets/icons/upload.png" class="icon-img big" alt="upload file"> Upload Transactions</h2>
+                <p>Upload a CSV file to analyze transaction fraud risks</p>
+                
+                <div class="upload-area" id="uploadArea">
+                    <img src="assets/icons/csv.png" class="icon-img big" alt="upload CSV">
+                    <h4>Drop your CSV file here or click to browse</h4>
+                    <p>Supports: .csv files with transaction data</p>
+                    <input type="file" id="fileInput" accept=".csv" hidden>
+                    <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">
+                        Choose File
+                    </button>
+                </div>
+                
+                <div class="upload-requirements">
+                    <h4>CSV Format Requirements:</h4>
+                    <ul>
+                        <li>Required columns: transaction_id, amount, customer_id, merchant, date</li>
+                        <li>Optional columns: category, location</li>
+                        <li>Date format: YYYY-MM-DD</li>
+                    </ul>
+                </div>
+                <!-- Add this after the upload requirements in index.html -->
+                <div class="upload-options">
+                    <label class="option-toggle">
+                        <input type="checkbox" id="clearExisting" checked>
+                        <span class="toggle-slider"></span>
+                        <p><strong>Clear existing data before upload</strong></p>
+                    </label>
+                    <button class="btn btn-warning" onclick="clearAllData()">
+                        <img src="assets/icons/trash.png" class="icon-img" alt="clear data"> Clear All Data
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Transactions Section -->
+        <section class="transactions-section" id="transactions">
+            <div class="section-header">
+                <h2>Transaction Details</h2>
+                <div class="export-buttons">
+                    <button class="btn btn-outline" onclick="exportCSV()">
+                        <img src="assets/icons/copy.png" class="icon-img" alt="download"> Export CSV
+                    </button>
+                    <button class="btn btn-outline" onclick="exportHTML()">
+                        <img src="assets/icons/export.png" class="icon-img" alt="export"> Export Report
+                    </button>
+                </div>
+            </div>
+
+            <div class="filters">
+                <select id="riskFilter" onchange="filterTransactions()">
+                    <option value="all">All Risk Levels</option>
+                    <option value="high">High Risk</option>
+                    <option value="medium">Medium Risk</option>
+                    <option value="low">Low Risk</option>
+                </select>
+                <input type="text" id="searchInput" placeholder="Search transactions..." onkeyup="filterTransactions()">
+            </div>
+
+            <div class="table-container">
+                <table id="transactionsTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Amount</th>
+                            <th>Customer</th>
+                            <th>Merchant</th>
+                            <th>Risk Score</th>
+                            <th>Risk Level</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transactionsBody">
+                        <!-- Transactions will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pagination">
+                <button id="prevBtn" onclick="changePage(-1)" disabled>Previous</button>
+                <span id="pageInfo">Page 1 of 1</span>
+                <button id="nextBtn" onclick="changePage(1)" disabled>Next</button>
+            </div>
+        </section>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner" class="loading-spinner" style="display: none;">
+        <div class="spinner"></div>
+        <p>Processing transactions...</p>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2024 FraudRisk Analytics. Built with Flask Backend.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
